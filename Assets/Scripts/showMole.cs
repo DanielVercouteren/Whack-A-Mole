@@ -5,11 +5,10 @@ using System.Collections.Generic;
 
 public class showMole : MonoBehaviour {
 	moleBehaviour mb = new moleBehaviour();
+	moleLives ml = new moleLives ();
 	List<GameObject> Moles;
-	GameObject[] ListofMoles;
 	List<int> ActiveMoles;
 
-	int numOfMoles;
 	int randomMole;
 
 	public int maxMoles = 7;
@@ -22,38 +21,50 @@ public class showMole : MonoBehaviour {
 		Moles = new List<GameObject>();
 		ActiveMoles = new List<int> ();
 
-		ListofMoles = mb.findMoles ();
+		//Get all moles, sorted
+		Moles = mb.findMoles ();
 
+		//Set all moles invisible + 
 		foreach (GameObject mole in Moles) {
 			mole.SetActive (false);
-			numOfMoles++;
 		}
 			
-		InvokeRepeating ("moleAnimation", 7.0f, maxMoles);
+		//Start popping up moles, every waitingtime seconds;
+		InvokeRepeating ("moleAnimation", 7.0f, waitingtime);
 	}
 
 	void moleAnimation(){
 		//Check how many moles are on the screen
+		//if maxMoles is not reached, go in
 		if (ActiveMoles.Count < maxMoles) {
-			randomMole = Random.Range(0, numOfMoles);
+			//Pop up a random mole in range 0 - amount of moles
+			randomMole = Random.Range(1, mb.amountOfMoles);
 
-			//Make sure no mol is already shown
+			//Check if mole already exists.
 			while (ActiveMoles.Contains (randomMole)) {
-				Debug.Log ("Mole #" + randomMole + " already exists!");
-				randomMole = Random.Range(1, numOfMoles);
+				randomMole = Random.Range(1, mb.amountOfMoles);
 			}
 
-			Debug.Log ("Will show mole #" + randomMole);
-			ActiveMoles.Add (randomMole);
-			mb.popupMole (randomMole);
+			//Add the mole number to ActiveMoles
+			ActiveMoles.Add (randomMole );
+
+			//Popup the mole from MoleList[randomMole - 1]
+			mb.popupMole (randomMole - 1);
 		} else {
 			//Hide longest waiting mol
-			Debug.Log("Will hide mole #" + ActiveMoles[0]);
 			mb.hideMole (ActiveMoles[0]);
-			ActiveMoles.Remove(ActiveMoles[0]);
+			ActiveMoles.RemoveAt(ActiveMoles[0]);
 
-			//Repeat process
-			moleAnimation ();
+			Debug.Log ("Lost a live!");
+			ml.loseALive ();
+			if (ml.lives == 0) {
+				//Stop the game
+
+			} else {
+				//Repeat process
+				moleAnimation ();
+			}
+			
 		}
 	}
 
@@ -71,8 +82,8 @@ public class showMole : MonoBehaviour {
 			scoreText.text = score.ToString ();
 		}
 
-		Debug.Log ("Hide mole " + molNummer);
-		mb.hideMole (ActiveMoles.IndexOf(molNummer));
-		ActiveMoles.Remove (ActiveMoles.IndexOf(molNummer));
+		Debug.Log ("Hide mole " + molNummer + " at index: " + ActiveMoles.IndexOf (molNummer));
+		mb.hideMole (molNummer - 1);
+		ActiveMoles.RemoveAt(ActiveMoles.IndexOf (molNummer));
 	}
 }
