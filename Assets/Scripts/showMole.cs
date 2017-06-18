@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
 public class showMole : MonoBehaviour {
 	moleBehaviour mb = new moleBehaviour();
 	List<GameObject> Moles;
+	GameObject[] ListofMoles;
 	List<int> ActiveMoles;
 
 	int numOfMoles;
@@ -13,11 +15,14 @@ public class showMole : MonoBehaviour {
 	public int maxMoles = 7;
 	public float waitingtime = 4.0f;
 
+	public Text scoreText;
+	int score = 0;
+
 	void Start(){
 		Moles = new List<GameObject>();
 		ActiveMoles = new List<int> ();
 
-		Moles = mb.findMoles ();
+		ListofMoles = mb.findMoles ();
 
 		foreach (GameObject mole in Moles) {
 			mole.SetActive (false);
@@ -50,5 +55,24 @@ public class showMole : MonoBehaviour {
 			//Repeat process
 			moleAnimation ();
 		}
+	}
+
+	public void hit(int molNummer){
+		this.score += 1;
+		if (score < 10) {
+			scoreText.text = "0000" + score.ToString ();
+		} else if (score < 100) {
+			scoreText.text = "000" + score.ToString ();
+		} else if (score < 1000) {
+			scoreText.text = "00" + score.ToString ();
+		} else if (score < 10000) {
+			scoreText.text = "0" + score.ToString ();
+		} else {
+			scoreText.text = score.ToString ();
+		}
+
+		Debug.Log ("Hide mole " + molNummer);
+		mb.hideMole (ActiveMoles.IndexOf(molNummer));
+		ActiveMoles.Remove (ActiveMoles.IndexOf(molNummer));
 	}
 }

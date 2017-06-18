@@ -4,16 +4,31 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class moleBehaviour : MonoBehaviour {
-	List<GameObject> MolesList = new List<GameObject>();
+	GameObject[] ObjectList;
+	GameObject[] MolesList;
+	public int amountOfMoles = 8;
 
-	public List<GameObject> findMoles(){
-		GameObject[] amountOfMoles = GameObject.FindObjectsOfType<GameObject>();
-		foreach (GameObject mole in amountOfMoles) {
-			if(mole.name.StartsWith("Mol ")){
-				MolesList.Add(mole);
+	public GameObject[] findMoles(){
+		MolesList = new GameObject[amountOfMoles];
+
+		//Get all GameObjects
+		ObjectList = GameObject.FindObjectsOfType<GameObject> ();
+
+		//Filter GameObjects for "Mol "
+		foreach (GameObject singleObject in ObjectList) {
+			if (singleObject.name.StartsWith ("Mol ")) {
+				//Get the position and place in MolesList
+				string position = singleObject.name.Replace ("Mol ", "");
+				Debug.Log ("Object found: " + position);
+				MolesList [int.Parse (position) - 1] = singleObject;
 			}
 		}
-		return MolesList;
+
+		for(int i = 0; i <= MolesList.Length; i++){
+			Debug.Log("Mole: " + MolesList[i].name);
+		}
+			
+		return  MolesList;
 	}
 
 	public void popupMole(int mole){
