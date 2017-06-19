@@ -7,7 +7,7 @@ public class moleBehaviour : MonoBehaviour {
 	GameObject[] MolesList;
 
 	//Has to be public! showMole gets this int.
-	public int amountOfMoles = 16;
+	public int amountOfMoles = 32;
 
 	public List<GameObject> findMoles(){
 		MolesList = new GameObject[amountOfMoles];

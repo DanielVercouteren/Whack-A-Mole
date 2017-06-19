@@ -6,14 +6,17 @@ using System.Collections.Generic;
 public class showMole : MonoBehaviour {
 	moleBehaviour mb = new moleBehaviour();
 	moleLives ml = new moleLives ();
+	countdownTimer cdt = new countdownTimer ();
+
 	List<GameObject> Moles;
 	List<int> ActiveMoles;
 
 	int randomMole;
 
-	public int maxMoles = 7;
+	public int maxMoles = 3;
 	public float waitingtime = 4.0f;
 
+	public Text rsgText;
 	public Text scoreText;
 	int score = 0;
 
@@ -52,14 +55,17 @@ public class showMole : MonoBehaviour {
 			mb.popupMole (randomMole - 1);
 		} else {
 			//Hide longest waiting mol
-			mb.hideMole (ActiveMoles[0]);
-			ActiveMoles.RemoveAt(ActiveMoles[0]);
+			Debug.Log("Hiding mole " + ActiveMoles[0]);
+			mb.hideMole (ActiveMoles[0] - 1);
+			ActiveMoles.RemoveAt(0);
 
-			Debug.Log ("Lost a live!");
 			ml.loseALive ();
 			if (ml.lives == 0) {
 				//Stop the game
-
+				StopAllCoroutines ();
+				CancelInvoke ();
+				rsgText.text = "Game over!";
+				rsgText.enabled = true;
 			} else {
 				//Repeat process
 				moleAnimation ();
