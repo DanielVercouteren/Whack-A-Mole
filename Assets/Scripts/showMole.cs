@@ -4,9 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class showMole : MonoBehaviour {
-	moleBehaviour mb = new moleBehaviour();
+	moleBehaviour mb = new moleBehaviour ();
 	moleLives ml = new moleLives ();
-	countdownTimer cdt = new countdownTimer ();
+	showMenu menu;
 
 	List<GameObject> Moles;
 	List<int> ActiveMoles;
@@ -18,9 +18,14 @@ public class showMole : MonoBehaviour {
 
 	public Text rsgText;
 	public Text scoreText;
-	int score = 0;
+	public Text hsText;
+	public int score = 0;
 
 	void Start(){
+		this.gameObject.AddComponent<showMenu>();
+		menu = this.GetComponent<showMenu> ();
+		menu.hideMenu ();
+
 		Moles = new List<GameObject> ();
 		ActiveMoles = new List<int> ();
 
@@ -108,8 +113,7 @@ public class showMole : MonoBehaviour {
 			//Stop the game
 			StopAllCoroutines ();
 			CancelInvoke ();
-			rsgText.text = "Game over!";
-			rsgText.enabled = true;
+			menu.showMenuScreen (score, hsText);
 		}
 	}
 
