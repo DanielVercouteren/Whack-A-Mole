@@ -13,8 +13,8 @@ public class showMole : MonoBehaviour {
 
 	int randomMole;
 
-	public int maxMoles = 8;
-	public float waitingtime = 1.3f;
+	int maxMoles = 7;
+	float waitingtime = 1.6f;
 
 	public Text rsgText;
 	public Text scoreText;
@@ -47,11 +47,11 @@ public class showMole : MonoBehaviour {
 	}
 
 	IEnumerator moleShow(){
-		int amountOfMolesToPop = Random.Range (1, 4);
+		int amountOfMolesToPop = Random.Range (2, 7);
 		Debug.Log ("Will show " + amountOfMolesToPop + " moles!");
 
 		for(int i = 0; i < amountOfMolesToPop; i++){
-			yield return new WaitForSeconds (0.3f);
+			yield return new WaitForSeconds (0.2f);
 			Debug.Log ("Mole " + (i+1));
 			//Check how many moles are on the screen
 			//if maxMoles is not reached, go in
@@ -78,7 +78,7 @@ public class showMole : MonoBehaviour {
 		}
 
 		//Randomly hide the last mole (10% chance)
-		int randomHideInt = Random.Range (0, 10);
+		int randomHideInt = Random.Range (0, 8);
 		Debug.Log ("Random int: " + randomHideInt);
 		if (randomHideInt == 1) {
 			Debug.Log ("Let's hide a random mole");
@@ -91,7 +91,7 @@ public class showMole : MonoBehaviour {
 		int firstMole = ActiveMoles[0];
 		Debug.Log ("Will hide mole " + ActiveMoles [0]);
 		//Wait for 1,2s
-		yield return new WaitForSeconds (1.2f);
+		yield return new WaitForSeconds (2.0f);
 
 		//Check what mole is first to hide (again, to check.)
 		//If it's still the same mole, hide it.
