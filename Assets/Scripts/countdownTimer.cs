@@ -13,6 +13,8 @@ public class countdownTimer : MonoBehaviour {
 	string text2 = "Set?";
 	string text3 = "Go!!";
 
+	Multiplayer mp = new Multiplayer();
+
 	GUIStyle style = new GUIStyle ();
 
 	// Use this for initialization
@@ -84,6 +86,11 @@ public class countdownTimer : MonoBehaviour {
 
 			rsgText1.text = "Tijd is op!";
 			rsgText2.text = "Tijd is op!";
+
+			StopAllCoroutines ();
+			CancelInvoke ();
+
+			mp.showEndScore (rsgText1, rsgText2);
 		}
 	}
 }

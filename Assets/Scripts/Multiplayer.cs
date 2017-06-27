@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using UnityEngine.UI;
+
+
 public class Multiplayer : MonoBehaviour {
 
 	moleBehaviour mb = new moleBehaviour();
-	moleLives ml = new moleLives ();
+
 	countdownTimer cdt = new countdownTimer ();
 
 	List<GameObject> Moles;
@@ -13,16 +16,19 @@ public class Multiplayer : MonoBehaviour {
 
 	int randomMole;
 
-
-	public int maxMoles = 16;
+	public int maxMoles = 72;
 	public float waitingtime = 1.3f;
 
 	public Text rsgText;
-	public Text scoreText;
+
+	public Text scoreTextLeft;
+	public Text scoreTextRight;
+
 	int scoreLeft = 0;  //LINKS SCORE
 	int scoreRight = 0;  //RECHTS SCORE
 
 	void Start(){
+		mb.amountOfMoles = 72;
 		Moles = new List<GameObject> ();
 		ActiveMoles = new List<int> ();
 
@@ -36,113 +42,67 @@ public class Multiplayer : MonoBehaviour {
 
 		//Start popping up moles, every waitingtime seconds
 		//First mole will pop up after 5 seconds
-		InvokeRepeating ("startMole", 6.0f, waitingtime);
+		InvokeRepeating ("moleShow", 6.0f, waitingtime);
 	}
 
-	void startMole(){
-		StartCoroutine (moleShow ());
+	void moleShow(){
+		randomMole = Random.Range (1, mb.amountOfMoles / 2);
+
+		mb.popupMole (randomMole - 1);
+		mb.popupMole (randomMole + 35);
 	}
 
-	IEnumerator moleShow(){
-		int amountOfMolesToPop = Random.Range (2, 8);
-		Debug.Log ("Will show " + amountOfMolesToPop + " moles!");
+	public void hit(int molNummer){
+		//Hide mole hit
+		mb.hideMole (molNummer - 1);
 
-		for(int i = 0; i < amountOfMolesToPop; i++){
-			yield return new WaitForSeconds (0.3f);
-			Debug.Log ("Mole " + (i+1));
-			//Check how many moles are on the screen
-			//if maxMoles is not reached, go in
-			if (ActiveMoles.Count < maxMoles) {
-				//Pop up a random mole in range 1 - amount of moles ("Mol 1" - "Mol 32")
-				randomMole = Random.Range (1, mb.amountOfMoles);
-
-				//Check if mole already exists.
-				//If it exists, activate a new mole
-				while (ActiveMoles.Contains (randomMole)) {
-					randomMole = Random.Range (1, mb.amountOfMoles);
-				}
-
-				Debug.Log ("Mole #" + (i+1) + " is mole " + randomMole);
-
-				//Add the mole number to ActiveMoles
-				ActiveMoles.Add (randomMole);
-
-				//Popup the mole from MoleList[randomMole - 1]
-				mb.popupMole (randomMole - 1);
+		//Check which side
+		if (molNummer < 37) {
+			this.scoreLeft += 10;
+			if (scoreLeft < 10) {
+				scoreTextLeft.text = "0000" + scoreLeft.ToString ();
+			} else if (scoreLeft < 100) {
+				scoreTextLeft.text = "000" + scoreLeft.ToString ();
+			} else if (scoreLeft < 1000) {
+				scoreTextLeft.text = "00" + scoreLeft.ToString ();
+			} else if (scoreLeft < 10000) {
+				scoreTextLeft.text = "0" + scoreLeft.ToString ();
 			} else {
-				moleHide ();
-			}
-		}
-
-		//Randomly hide the last mole (10% chance)
-		int randomHideInt = Random.Range (0, 10);
-		Debug.Log ("Random int: " + randomHideInt);
-		if (randomHideInt == 1) {
-			Debug.Log ("Let's hide a random mole");
-			StartCoroutine(randomHide());
-		}
-	}
-
-	IEnumerator randomHide(){
-		//Check what mole is first to hide
-		int firstMole = ActiveMoles[0];
-		Debug.Log ("Will hide mole " + ActiveMoles [0]);
-		//Wait for 1,2s
-		yield return new WaitForSeconds (1.2f);
-
-		//Check what mole is first to hide (again, to check.)
-		//If it's still the same mole, hide it.
-		if (firstMole == ActiveMoles[0]) {
-			moleHide ();
-		}
-	}
-
-	void moleHide(){
-		//Hide longest waiting mole
-		//Remove the mole from the ActiveMoles list.
-		Debug.Log ("Hiding mole " + ActiveMoles [0]);
-		mb.hideMole (ActiveMoles [0] - 1);
-		ActiveMoles.RemoveAt (0);
-
-		}
-
-
-
-public void hit(int molNummer){
-
-		if (side == 0) {
-		this.scoreLeft += 10;
-		if (scoreLeft < 10) {
-			scoreText.text = "0000" + scoreLeft.ToString ();
-		} else if (scoreLeft < 100) {
-			scoreText.text = "000" + scoreLeft.ToString ();
-		} else if (scoreLeft < 1000) {
-			scoreText.text = "00" + scoreLeft.ToString ();
-		} else if (scoreLeft < 10000) {
-			scoreText.text = "0" + scoreLeft.ToString ();
+				scoreTextLeft.text = scoreLeft.ToString ();
+			} 
+			//Hide same mole right
+			mb.hideMole (molNummer + 35);
 		} else {
-			scoreText.text = scoreLeft.ToString ();
+			this.scoreRight += 10;
+			if (scoreRight < 10) {
+				scoreTextRight.text = "0000" + scoreRight.ToString ();
+			} else if (scoreRight < 100) {
+				scoreTextRight.text = "000" + scoreRight.ToString ();
+			} else if (scoreRight < 1000) {
+				scoreTextRight.text = "00" + scoreRight.ToString ();
+			} else if (scoreRight < 10000) {
+				scoreTextRight.text = "0" + scoreRight.ToString ();
+			} else {
+				scoreTextRight.text = scoreRight.ToString ();
+			} 
+			//Hide same mole left
+			mb.hideMole (molNummer - 36);
 		} 
-		mb.hideMole (molNummer - 1);
-		ActiveMoles.RemoveAt(ActiveMoles.IndexOf (molNummer));
 	}
-	else {
-		this.scoreLeft += 10;
-		if (scoreLeft < 10) {
-			scoreText.text = "0000" + scoreLeft.ToString ();
-		} else if (scoreLeft < 100) {
-			scoreText.text = "000" + scoreLeft.ToString ();
-		} else if (scoreLeft < 1000) {
-			scoreText.text = "00" + scoreLeft.ToString ();
-		} else if (scoreLeft < 10000) {
-			scoreText.text = "0" + scoreLeft.ToString ();
+
+	public 	void showEndScore(Text left, Text right){
+		if (scoreLeft > scoreRight) {
+			left.text = "WINNAAR!";
+			right.text = "LOSER!";
+		} else if (scoreRight > scoreLeft) {
+			left.text = "LOSER!";
+			right.text = "WINNAAR!";
 		} else {
-			scoreText.text = scoreLeft.ToString ();
-		} 
-		mb.hideMole (molNummer - 1);
-		ActiveMoles.RemoveAt(ActiveMoles.IndexOf (molNummer));
+			//Draw
+			left.text = "GELIJKSPEL!";
+			right.text = "GELIJKSPEL!";
+		}
 
-		} 
-
-}
+		//Show back button
+	}
 }
