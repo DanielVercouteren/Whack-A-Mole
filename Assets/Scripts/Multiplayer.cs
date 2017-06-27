@@ -17,6 +17,8 @@ public class Multiplayer : MonoBehaviour {
 	public int maxMoles = 16;
 	public float waitingtime = 1.3f;
 
+	public Text rsgText;
+	public Text scoreText;
 	int scoreLeft = 0;  //LINKS SCORE
 	int scoreRight = 0;  //RECHTS SCORE
 
