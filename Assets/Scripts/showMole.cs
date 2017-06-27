@@ -113,7 +113,7 @@ public class showMole : MonoBehaviour {
 			//Stop the game
 			StopAllCoroutines ();
 			CancelInvoke ();
-			menu.showMenuScreen (score, hsText);
+			menu.showMenuScreen (score);
 		}
 	}
 
