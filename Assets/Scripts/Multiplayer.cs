@@ -13,15 +13,10 @@ public class Multiplayer : MonoBehaviour {
 
 	int randomMole;
 
-	bool side;
-
-
 
 	public int maxMoles = 16;
 	public float waitingtime = 1.3f;
 
-	public Text rsgText;
-	public Text scoreText;
 	int scoreLeft = 0;  //LINKS SCORE
 	int scoreRight = 0;  //RECHTS SCORE
 
@@ -111,9 +106,9 @@ public class Multiplayer : MonoBehaviour {
 
 
 
-public void hit(int molNummer, bool side){
+public void hit(int molNummer){
 
-	if bool side = 0 {
+		if (side == 0) {
 		this.scoreLeft += 10;
 		if (scoreLeft < 10) {
 			scoreText.text = "0000" + scoreLeft.ToString ();
