@@ -113,13 +113,12 @@ public class showMole : MonoBehaviour {
 			//Stop the game
 			StopAllCoroutines ();
 			CancelInvoke ();
-			menu.showMenuScreen (score);
+			menu.showMenuScreen (score, hsText);
 		}
 	}
 
 
 	public void hit(int molNummer){
-		//Add 10 points to score
 		this.score += 10;
 		if (score < 10) {
 			scoreText.text = "0000" + score.ToString ();

@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class countdownTimer : MonoBehaviour {
+	Multiplayer mp;
 	public Text secondText;
 	int seconds;
 	int players;
@@ -13,12 +14,13 @@ public class countdownTimer : MonoBehaviour {
 	string text2 = "Set?";
 	string text3 = "Go!!";
 
-	Multiplayer mp = new Multiplayer();
-
 	GUIStyle style = new GUIStyle ();
 
 	// Use this for initialization
 	void Start () {
+		this.gameObject.AddComponent<Multiplayer>();
+		mp = this.GetComponent<Multiplayer> ();
+
 		style.richText = true;
 
 		//Get players from PlayerPrefs
@@ -81,6 +83,8 @@ public class countdownTimer : MonoBehaviour {
 		}
 
 		if (seconds == 0) {
+			secondText.text = "";
+
 			rsgText1.enabled = true;
 			rsgText2.enabled = true;
 

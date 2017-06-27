@@ -1,25 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 
 public class Multiplayer : MonoBehaviour {
-
 	moleBehaviour mb = new moleBehaviour();
 
-	countdownTimer cdt = new countdownTimer ();
-
 	List<GameObject> Moles;
-	List<int> ActiveMoles;
 
 	int randomMole;
+
+	bool gameDone = false;
 
 	public int maxMoles = 72;
 	public float waitingtime = 1.3f;
 
-	public Text rsgText;
+	public GameObject hoofdmenu;
 
 	public Text scoreTextLeft;
 	public Text scoreTextRight;
@@ -30,7 +27,6 @@ public class Multiplayer : MonoBehaviour {
 	void Start(){
 		mb.amountOfMoles = 72;
 		Moles = new List<GameObject> ();
-		ActiveMoles = new List<int> ();
 
 		//Get all moles, sorted
 		Moles = mb.findMoles ();
@@ -53,44 +49,51 @@ public class Multiplayer : MonoBehaviour {
 	}
 
 	public void hit(int molNummer){
-		//Hide mole hit
-		mb.hideMole (molNummer - 1);
+		if (!gameDone) {
+			//Hide mole hit
+			mb.hideMole (molNummer - 1);
 
-		//Check which side
-		if (molNummer < 37) {
-			this.scoreLeft += 10;
-			if (scoreLeft < 10) {
-				scoreTextLeft.text = "0000" + scoreLeft.ToString ();
-			} else if (scoreLeft < 100) {
-				scoreTextLeft.text = "000" + scoreLeft.ToString ();
-			} else if (scoreLeft < 1000) {
-				scoreTextLeft.text = "00" + scoreLeft.ToString ();
-			} else if (scoreLeft < 10000) {
-				scoreTextLeft.text = "0" + scoreLeft.ToString ();
+			//Check which side
+			if (molNummer < 37) {
+				this.scoreLeft += 10;
+				if (scoreLeft < 10) {
+					scoreTextLeft.text = "Score: 0000" + scoreLeft.ToString ();
+				} else if (scoreLeft < 100) {
+					scoreTextLeft.text = "Score: 000" + scoreLeft.ToString ();
+				} else if (scoreLeft < 1000) {
+					scoreTextLeft.text = "Score: 00" + scoreLeft.ToString ();
+				} else if (scoreLeft < 10000) {
+					scoreTextLeft.text = "Score: 0" + scoreLeft.ToString ();
+				} else {
+					scoreTextLeft.text = "Score: " + scoreLeft.ToString ();
+				} 
+				//Hide same mole right
+				mb.hideMole (molNummer + 35);
 			} else {
-				scoreTextLeft.text = scoreLeft.ToString ();
-			} 
-			//Hide same mole right
-			mb.hideMole (molNummer + 35);
-		} else {
-			this.scoreRight += 10;
-			if (scoreRight < 10) {
-				scoreTextRight.text = "0000" + scoreRight.ToString ();
-			} else if (scoreRight < 100) {
-				scoreTextRight.text = "000" + scoreRight.ToString ();
-			} else if (scoreRight < 1000) {
-				scoreTextRight.text = "00" + scoreRight.ToString ();
-			} else if (scoreRight < 10000) {
-				scoreTextRight.text = "0" + scoreRight.ToString ();
-			} else {
-				scoreTextRight.text = scoreRight.ToString ();
-			} 
-			//Hide same mole left
-			mb.hideMole (molNummer - 36);
-		} 
+				this.scoreRight += 10;
+				if (scoreRight < 10) {
+					scoreTextRight.text = "Score: 0000" + scoreRight.ToString ();
+				} else if (scoreRight < 100) {
+					scoreTextRight.text = "Score: 000" + scoreRight.ToString ();
+				} else if (scoreRight < 1000) {
+					scoreTextRight.text = "Score: 00" + scoreRight.ToString ();
+				} else if (scoreRight < 10000) {
+					scoreTextRight.text = "Score: 0" + scoreRight.ToString ();
+				} else {
+					scoreTextRight.text = "Score: " + scoreRight.ToString ();
+				} 
+				//Hide same mole left
+				mb.hideMole (molNummer - 37);
+			}
+		}
 	}
 
 	public 	void showEndScore(Text left, Text right){
+		gameDone = true;
+		hoofdmenu.SetActive (true);
+		CancelInvoke ();
+		StopAllCoroutines ();
+
 		if (scoreLeft > scoreRight) {
 			left.text = "WINNAAR!";
 			right.text = "LOSER!";
@@ -104,5 +107,14 @@ public class Multiplayer : MonoBehaviour {
 		}
 
 		//Show back button
+
+	}
+
+	public void returnHome(){
+		SceneManager.LoadScene ("Initial");
+	}
+
+	public void restartLevel(){
+		SceneManager.LoadScene ("Multiplayer");
 	}
 }
