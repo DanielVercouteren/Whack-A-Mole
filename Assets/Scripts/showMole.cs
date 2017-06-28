@@ -47,7 +47,7 @@ public class showMole : MonoBehaviour {
 	}
 
 	IEnumerator moleShow(){
-		int amountOfMolesToPop = Random.Range (2, 7);
+		int amountOfMolesToPop = Random.Range (2, 7); //random how manny moles can max pop up
 		Debug.Log ("Will show " + amountOfMolesToPop + " moles!");
 
 		for(int i = 0; i < amountOfMolesToPop; i++){
@@ -118,7 +118,7 @@ public class showMole : MonoBehaviour {
 	}
 
 
-	public void hit(int molNummer){
+	public void hit(int molNummer){ //score on hit
 		this.score += 10;
 		if (score < 10) {
 			scoreText.text = "0000" + score.ToString ();

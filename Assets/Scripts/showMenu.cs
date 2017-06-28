@@ -13,7 +13,7 @@ public class showMenu : MonoBehaviour {
 	Text hsText;
 
 	public void hideMenu(){
-		gameMenu = GameObject.FindGameObjectWithTag ("gameOverMenu");
+		gameMenu = GameObject.FindGameObjectWithTag ("gameOverMenu"); //gameover menu
 		gameMenu.SetActive (false);
 	}
 
